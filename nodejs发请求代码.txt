@@ -1,0 +1,121 @@
+const request = require('request');
+const cheerio = require('cheerio');
+
+const url = 'https://www.example.com';
+
+request(url, function(error, response, body) {
+  if (!error && response.statusCode == 200) {
+    const $ = cheerio.load(body);
+    $('a').each(function() {
+      const link = $(this).attr('href');
+      console.log(link);
+    });
+  } else {
+    console.log('Error:', error);
+  }
+});
+
+const request = require('request');
+const cheerio = require('cheerio');
+
+
+const url = 'http://example.com/list'; // 列表页URL
+const selector = 'ul li a'; // 选择器，用于选择要提取的元素
+
+request(url, (error, response, html) => {
+  if (!error && response.statusCode === 200) {
+    const $ = cheerio.load(html);
+
+    $(selector).each((i, el) => {
+      const link = $(el).attr('href'); // 获取元素链接
+      request(link, (error, response, html) => {
+        if (!error && response.statusCode === 200) {
+          const $ = cheerio.load(html);
+
+          // 在这里提取想要的数据
+          const title = $('h1').text();
+          const content = $('article').html();
+          console.log(title, content);
+        }
+      });
+    });
+  }
+});
+
+
+const request = require('request');
+const cheerio = require('cheerio');
+
+const url = 'http://example.com/list?page='; // 列表页URL
+const selector = 'ul li a'; // 选择器，用于选择要提取的元素
+const maxPages = 10; // 最大爬取页数
+
+let currentPage = 1;
+
+function crawlPage(page) {
+  const pageUrl = url + page;
+  
+  request(pageUrl, (error, response, html) => {
+    if (!error && response.statusCode === 200) {
+      const $ = cheerio.load(html);
+
+      $(selector).each((i, el) => {
+        const link = $(el).attr('href'); // 获取元素链接
+        request(link, (error, response, html) => {
+          if (!error && response.statusCode === 200) {
+            const $ = cheerio.load(html);
+
+            // 在这里提取想要的数据
+            const title = $('h1').text();
+            const content = $('article').html();
+            console.log(title, content);
+          }
+        });
+      });
+      
+      // 继续爬取下一页
+      if (page < maxPages) {
+        crawlPage(page + 1);
+      }
+    }
+  });
+}
+
+crawlPage(currentPage);
+
+当然，Node.js中也有很多第三方库可以实现定时任务，比如node-schedule，node-cron等。
+
+以下是基于node-schedule的一个示例，用于按天定时运行爬虫程序：
+
+const schedule = require('node-schedule');
+
+function crawl() {
+  // 在这里写爬虫程序
+}
+
+const job = schedule.scheduleJob('0 0 0 * * *', crawl); // 每天0点0分0秒运行爬虫程序
+
+要在后台运行Node.js程序，可以使用pm2这个流行的进程管理器。pm2可以让您轻松地在后台运行Node.js应用程序，并监视应用程序的状态和日志。
+
+
+以下是使用pm2在后台运行Node.js程序的步骤：
+
+安装pm2：
+npm install pm2 -g
+编写Node.js程序，并保存为app.js。
+
+运行以下命令以在后台运行应用程序：
+pm2 start app.js
+您可以使用以下命令来监视应用程序的状态：
+pm2 status
+如果需要停止应用程序，可以运行以下命令：
+pm2 stop app.js
+如果您需要重启应用程序，可以运行以下命令：
+pm2 restart app.js
+使用pm2可以让您轻松地在后台运行Node.js应用程序，并在应用程序崩溃时自动重启应用程序。此外，pm2还可以让您管理多个应用程序，并监视它们的状态和日志。
+
+
+
+
+
+

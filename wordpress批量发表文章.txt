@@ -1,0 +1,131 @@
+###nodejs版本
+const fetch = require('node-fetch');
+
+const apiUrl = 'https://example.com/wp-json/wp/v2/posts'; // 替换成您的WordPress站点URL
+const authToken = 'Bearer <YOUR_TOKEN>'; // 替换成您的WordPress REST API身份验证令牌
+
+const posts = [
+  {
+    title: '文章标题1',
+    content: '文章内容1',
+    status: 'publish',
+  },
+  {
+    title: '文章标题2',
+    content: '文章内容2',
+    status: 'publish',
+  },
+  // ... 添加更多文章
+];
+
+async function createPosts() {
+  for (const post of posts) {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': authToken,
+      },
+      body: JSON.stringify(post),
+    });
+    
+    const data = await response.json();
+    
+    console.log(`文章 "${data.title.rendered}" 已发布，ID: ${data.id}`);
+  }
+}
+
+createPosts();
+
+#python版本的
+以下是一个简单的Python程序，可以通过WordPress REST API实现批量插入文章。
+
+python
+Copy code
+import requests
+
+api_url = 'https://example.com/wp-json/wp/v2/posts' # 替换成您的WordPress站点URL
+auth_token = 'Bearer <YOUR_TOKEN>' # 替换成您的WordPress REST API身份验证令牌
+
+posts = [
+    {
+        'title': '文章标题1',
+        'content': '文章内容1',
+        'status': 'publish',
+    },
+    {
+        'title': '文章标题2',
+        'content': '文章内容2',
+        'status': 'publish',
+    },
+    # ... 添加更多文章
+]
+
+def create_posts():
+    for post in posts:
+        response = requests.post(api_url, headers={
+            'Content-Type': 'application/json',
+            'Authorization': auth_token,
+        }, json=post)
+        
+        data = response.json()
+        
+        print(f"文章 '{data['title']['rendered']}' 已发布，ID: {data['id']}")
+
+create_posts()
+
+#java版本的
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class WordpressBatchPost {
+    private static final String API_URL = "https://example.com/wp-json/wp/v2/posts"; // 替换成您的WordPress站点URL
+    private static final String AUTH_TOKEN = "Bearer <YOUR_TOKEN>"; // 替换成您的WordPress REST API身份验证令牌
+
+    public static void main(String[] args) throws Exception {
+        List<Map<String, Object>> posts = new ArrayList<>();
+        posts.add(createPost("文章标题1", "文章内容1", "publish"));
+        posts.add(createPost("文章标题2", "文章内容2", "publish"));
+        // ... 添加更多文章
+
+        for (Map<String, Object> post : posts) {
+            HttpURLConnection connection = (HttpURLConnection) new URL(API_URL).openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", AUTH_TOKEN);
+            connection.setDoOutput(true);
+
+            ObjectMapper mapper = new ObjectMapper();
+            String requestBody = mapper.writeValueAsString(post);
+            connection.getOutputStream().write(requestBody.getBytes());
+
+            int statusCode = connection.getResponseCode();
+            String response = new Scanner(connection.getInputStream(), "UTF-8").useDelimiter("\\A").next();
+
+            if (statusCode >= 200 && statusCode < 300) {
+                Map<String, Object> responseData = mapper.readValue(response, Map.class);
+                System.out.println(String.format("文章 '%s' 已发布，ID: %d", responseData.get("title"), responseData.get("id")));
+            } else {
+                System.err.println(String.format("无法插入文章，响应码: %d, 响应内容: %s", statusCode, response));
+            }
+
+            connection.disconnect();
+        }
+    }
+
+    private static Map<String, Object> createPost(String title, String content, String status) {
+        Map<String, Object> post = new HashMap<>();
+        post.put("title", title);
+        post.put("content", content);
+        post.put("status", status);
+        return post;
+    }
+}
+

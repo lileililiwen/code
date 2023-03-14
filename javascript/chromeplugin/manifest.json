@@ -1,0 +1,16 @@
+{
+    "name": "My Chrome Extension",
+    "description": "This is a demo extension",
+    "version": "1.0",
+    "manifest_version": 2,
+    "permissions": ["tabs", "http://*/*","https://*/*"],
+    "web_accessible_resources": ["jquery-3.6.0.min.js"],
+    "content_scripts": [{
+        "matches": ["http://*/*","https://*/*"],
+        "js": ["jquery-3.6.0.min.js","content.js"]
+    }],
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    }
+}

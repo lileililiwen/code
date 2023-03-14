@@ -1,0 +1,64 @@
+以下是一个简单的 Python 代码示例，用于管理不同语言版本的代码，并提供Web界面以查看这些代码。
+
+首先，需要安装 Flask 和 Pygments 这两个库，它们分别用于创建Web界面和高亮显示代码。可以使用 pip 命令进行安装。
+
+Copy code
+pip install Flask Pygments
+代码示例：
+
+python
+Copy code
+from flask import Flask, render_template
+from pygments import highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import HtmlFormatter
+
+app = Flask(__name__)
+
+# 用于存储代码的字典
+codes = {
+    '功能1': {
+        'Java': '代码示例1',
+        'PHP': '代码示例2',
+        'Node.js': '代码示例3',
+        'Linux Shell': '代码示例4',
+        'Python': '代码示例5',
+        'CMD': '代码示例6'
+    },
+    '功能2': {
+        'Java': '代码示例1',
+        'PHP': '代码示例2',
+        'Node.js': '代码示例3',
+        'Linux Shell': '代码示例4',
+        'Python': '代码示例5',
+        'CMD': '代码示例6'
+    }
+}
+
+# 获取代码
+def get_code(function, language):
+    if function in codes and language in codes[function]:
+        return codes[function][language]
+    else:
+        return None
+
+# Web界面
+@app.route('/')
+def index():
+    return render_template('index.html', functions=codes.keys())
+
+@app.route('/<function>/<language>')
+def view_code(function, language):
+    code = get_code(function, language)
+    if code:
+        lexer = get_lexer_by_name(language, stripall=True)
+        formatter = HtmlFormatter()
+        return highlight(code, lexer, formatter)
+    else:
+        return 'Code not found'
+
+if __name__ == '__main__':
+    app.run()
+	
+	
+	

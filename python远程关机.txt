@@ -1,0 +1,19 @@
+import paramiko
+
+# 创建 SSH 客户端
+ssh = paramiko.SSHClient()
+
+# 添加主机密钥，如果是第一次连接需要
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+# 连接远程计算机
+ssh.connect(hostname='192.168.1.1', username='username', password='password')
+
+# 执行关机命令
+stdin, stdout, stderr = ssh.exec_command('shutdown /s /t 0')
+
+# 执行重启命令
+stdin, stdout, stderr = ssh.exec_command('shutdown /r /t 0')
+
+# 关闭 SSH 连接
+ssh.close()

@@ -1,0 +1,27 @@
+# 排除node_modules目录
+node_modules/
+
+# 排除操作系统自动生成的文件
+*.log
+*.swp
+.DS_Store
+
+# 排除编译生成的文件
+/dist/
+/build/
+
+# 排除配置文件中包含敏感信息的部分
+config.js
+config.json
+*.key
+
+# 排除IDE或编辑器生成的文件
+.vscode/
+.idea/
+
+# 排除测试用的数据文件
+test_data/
+
+# 排除压缩文件
+*.zip
+*.tar.gz

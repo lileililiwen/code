@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "canvas": "^2.11.0",
+    "cheerio": "^1.0.0-rc.12",
+    "fs": "^0.0.1-security",
+    "qrcode": "^1.5.1",
+    "request": "^2.88.2",
+    "yo": "^4.3.1"
+  }
+}

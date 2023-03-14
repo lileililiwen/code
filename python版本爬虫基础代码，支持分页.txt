@@ -1,0 +1,68 @@
+import requests
+from bs4 import BeautifulSoup
+
+url = 'http://example.com/list?page='  # 列表页URL
+selector = 'ul li a'  # 选择器，用于选择要提取的元素
+max_pages = 10  # 最大爬取页数
+
+current_page = 1
+
+def crawl_page(page):
+    page_url = url + str(page)
+    response = requests.get(page_url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        for el in soup.select(selector):
+            link = el['href']
+            response = requests.get(link)
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                # 在这里提取想要的数据
+                title = soup.select_one('h1').text
+                content = soup.select_one('article').text
+                print(title, content)
+                
+        # 继续爬取下一页
+        if page < max_pages:
+            crawl_page(page + 1)
+
+crawl_page(current_page)
+
+
+import schedule
+import time
+
+def crawl():
+    # 在这里写爬虫程序
+
+
+schedule.every().day.at("10:30:00").do(crawl)  # 每天的10:30:00运行爬虫程序
+
+//schedule.every().day.do(crawl)  # 每天运行一次爬虫程序
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+	
+	
+要在后台运行Python程序，可以使用nohup和&命令。nohup命令可以让您在后台运行程序，并且即使在关闭终端后，程序也能继续运行。&命令可以让您将命令放到后台运行。
+
+以下是使用nohup和&命令在后台运行Python程序的步骤：
+
+编写Python程序，并保存为app.py。
+
+运行以下命令以在后台运行应用程序：
+nohup python app.py &
+这个命令会将Python程序放到后台运行，并且将输出保存到nohup.out文件中。如果您想指定不同的输出文件名，可以使用以下命令：
+
+nohup python app.py > output.log 2>&1 &
+这个命令会将Python程序放到后台运行，并且将输出保存到output.log文件中。
+
+如果需要停止应用程序，可以使用以下命令：
+killall -9 python
+这个命令会杀死所有Python进程。
+
+使用nohup和&命令可以让您在后台运行Python应用程序，并且即使在关闭终端后，程序也能继续运行。但是，这种方式无法监视应用程序的状态和日志。如果您需要监视应用程序的状态和日志，可以使用第三方库如supervisor或systemd。	
+	
+	
